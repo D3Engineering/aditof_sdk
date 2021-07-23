@@ -48,6 +48,9 @@ print_help() {
         echo "--image_name"
         echo "        Specify the name of the resulting image. "
         echo "        Default: dragonboard410c_latest_<sha of HEAD commit from \"branch\"> "
+	echo "--sdcard_name"
+	echo "	      Specify the name of the sdcard device that the image will DD'ed onto"
+	echo "	      Example : sudo /bin/dd if=dragonboard410c_lastest_<sha of HEAD commit from \"branch\"> of=/dev/sdcard_name bs=4M status=progress"
 }
 
 answer_yes=""
@@ -232,7 +235,7 @@ sudo cp -rf ${KERNEL_MODULES_PATH}/lib/modules/4.9-camera-lt-qcom /mnt/lib/modul
 # ########## build sdk
 
 [ -d "aditof_sdk" ] || {
-        git clone --branch "${branch}" --depth 1 https://github.com/analogdevicesinc/aditof_sdk
+        git clone --branch "${branch}" --depth 1 https://github.com/D3-aavery/aditof_sdk
 }
 
 sha=""

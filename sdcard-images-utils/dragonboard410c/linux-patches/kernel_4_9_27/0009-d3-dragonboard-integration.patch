@@ -1,0 +1,69 @@
+From 9c7fcdb58e077574209d602dabf7a5144de49f20 Thurs Jul 22 00:00:00 2021
+From: Christopher Larson <clarson@d3engineering.com>, Brian Youngman <byoungman@d3engineering.com>
+Date: Thurs, 22 Jul 2021 11:34:00 +0300
+Subject [PATCH] Dragonboard 410c & D3 Interface Card Integration
+
+Removing cci from the camera
+Changing EEPROM to i2c bus 1
+Change reset-gpios to pin 13
+Removing the address shift in write/read_reg
+
+Signed-off-by: Alex Avery <aavery@d3engineering.com>
+---
+ arch/arm64/boot/dts/qcom/aditof-db410c.dtsi | 13+-
+ 1 file changed, 4 insertion(+), 9 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/aditof-db410c.dtsi b/arch/arm64/boot/dts/qcom/aditof-db410c.dtsi
+index faab150605db..374fb388e83d 100644
+--- a/arch/arm64/boot/dts/qcom/aditof-db410c.dtsi
++++ b/arch/arm64/boot/dts/qcom/aditof-db410c.dtsi
+@@ -19,9 +19,8 @@
+ 		status = "ok";
+ 		compatible = "adi,addi903x";
+ 		reg = <0x64>;
+-    		qcom,use_cci;
+ 
+-    		reset-gpios = <&msmgpio 36 GPIO_ACTIVE_LOW>;
++		reset-gpios = <&msmgpio 13 GPIO_ACTIVE_LOW>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&camera_front_default>;
+ 
+@@ -37,10 +36,6 @@
+ 			};
+ 		};
+ 	};
+-};
+-
+-&blsp_i2c2{
+-	status = "ok";
+ 	eeprom@56 {
+     		compatible = "atmel,24c1024";
+     		reg = <0x56>;
+diff --git a/drivers/media/i2c/addi903x.c b/drivers/media/i2c/addi903x.c
+index e93e2893bed2..29ca968b69ba 100644
+--- a/drivers/media/i2c/addi903x.c
++++ b/drivers/media/i2c/addi903x.c
+@@ -168,7 +168,7 @@ static int addi903x_write_reg(struct addi903x* addi903x, u16 reg, u16* val)
+ 	} else {
+ 		struct i2c_msg msg;
+ 		u8 data[4] =  {(reg & 0xff00) >> 8, reg & 0xff, (*val & 0xff00) >> 8, *val & 0xff};
+-		msg.addr = i2c_addr >> 1;
++		msg.addr = i2c_addr;
+ 		msg.len = 4;
+ 		msg.buf = data;
+ 		msg.flags = 0;
+@@ -198,12 +198,12 @@ static int addi903x_read_reg(struct addi903x* addi903x, u16 reg, u16* val)
+ 	}  else	{
+ 		struct i2c_msg msg[2];
+ 		u8 data[2] =  {(reg & 0xff00) >> 8, reg & 0xff};
+-		msg[0].addr = i2c_addr >> 1;
++		msg[0].addr = i2c_addr;
+ 		msg[0].len =  2;
+ 		msg[0].buf = data;
+ 		msg[0].flags = 0;
+ 
+-		msg[1].addr = i2c_addr >> 1;
++		msg[1].addr = i2c_addr;
+ 		msg[1].len = 1;
+ 		msg[1].buf = (u8 *)val;
+ 		msg[1].flags = I2C_M_RD;
