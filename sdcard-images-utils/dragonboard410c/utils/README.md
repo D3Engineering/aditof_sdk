@@ -1,6 +1,6 @@
 # Scripts
 
-Dragonboard helper script, `image.sh`, can be used to build a `.img` file. Remove the `rm -rf ${working_dir}` line of the script, and use the `d3-image.sh` script to rebuild the `.img` file without needing to checkout repositories and pull files. The Dragonboard helper script needs to be run once to completion for the D3 helper script to be able to run.
+Dragonboard helper script, `image.sh`, can be used to build a `.img` file. Before running the shortened version of the script, you must run the full script and disable the post-script cleanup by using `-c|--cleanup` flag. To have the script automatically flash your image to an SD card once the image has been made, use the `--sdcard_name` flag and specify the device node where the SD card is located.
 
 #### Prerequisites
 The script has been tested on `ubuntu:18.04` and `ubuntu:20.04`, with the following packages being required to be preinstalled before running.
@@ -45,6 +45,10 @@ sudo apt-get install git wget tar make abootimg simg2img mount qemu-user-static 
 --sdcard_name
 	Specify the name of the sdcard device that the image will be DD'ed onto
 	Example : sudo /bin/dd if=dragonboard410c_lastest_<sha of HEAD commit from \"branch\"> of=/dev/sdcard_name bs=4M status=progress
+-c|--cleanup
+	Disable the clean up of the working directory at the end of the script
+-s|--short
+	Run the shortened version of the script
 	
 ```
 #### Troubleshooting

@@ -15,7 +15,7 @@ sudo apt-get install -yy -qq libssl-dev python-dev python3-dev build-essential l
 
 cd /home/linaro/workspace/github
 
-wget http://swdownloads.analog.com/cse/aditof/deps-dragonboard.tar.xz
+wget --no-check-certificate --no-cache --no-cookies http://swdownloads.analog.com/cse/aditof/deps-dragonboard.tar.xz
 tar -xf deps-dragonboard.tar.xz
 
 sed -i 's+/home/linaro/workspace/github/aditof_sdk/deps/installed/opencv-3.4.1+/usr/local+g' /home/linaro/workspace/github/deps/opencv-3.4.1/lib/pkgconfig/opencv.pc
@@ -40,7 +40,8 @@ sudo rm -rf /home/linaro/workspace/github/deps-dragonboard.tar.xz
 
 sudo ldconfig
 
-git clone --branch $1 https://github.com/analogdevicesinc/aditof_sdk
+git clone --branch d3/dev/Arrow https://omni.d3engineering.com/cgit/cgit.cgi/d3/adi/tof_sdk.git/
+echo $1
 
 cd aditof_sdk
 

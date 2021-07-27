@@ -43,14 +43,18 @@ print_help() {
         echo "        Specify the patches that will be applied to kernel_repo. "
         echo "        Default: kernel_4_9_27 "
         echo "--branch"
-        echo "        Specify the aditof_sdk branch/tag that will be built. "
+        echo "        Specify the tof_sdk branch/tag that will be built. "
         echo "        Default: master "
         echo "--image_name"
         echo "        Specify the name of the resulting image. "
         echo "        Default: dragonboard410c_latest_<sha of HEAD commit from \"branch\"> "
 	echo "--sdcard_name"
-	echo "	      Specify the name of the sdcard device that the image will DD'ed onto"
-	echo "	      Example : sudo /bin/dd if=dragonboard410c_lastest_<sha of HEAD commit from \"branch\"> of=/dev/sdcard_name bs=4M status=progress"
+	echo "	Specify the name of the sdcard device that the image will DD'ed onto"
+	echo "	Example : sudo /bin/dd if=dragonboard410c_lastest_<sha of HEAD commit from \"branch\"> of=/dev/sdcard_name bs=4M status=progress"
+	echo "-c|--cleanup"
+	echo "	Disable the clean up of the working directory at the end of the script"
+	echo "-s|--short"
+	echo "	Run the shortened version of the script"
 }
 
 answer_yes=""
@@ -62,8 +66,11 @@ kernel_modules_path="db410c-modules"
 kernel_repo="https://github.com/D3Engineering/linux_kernel_qcomlt.git"
 kernel_branch="d3/release/ov5640_4.9.27"
 kernel_patches="kernel_4_9_27"
-branch="master"
+branch="d3/dev/Arrow"
 image_name=""
+sdcard_name=""
+cleanup="True"
+short_version=""
 
 while [[ $# -gt 0 ]]
 do
@@ -133,6 +140,22 @@ case $key in
         shift # past value
         ;;
 
+	--sdcard_name)
+	sdcard_name=$2
+        shift # past argument
+        shift # past value
+	;;
+
+	-c|--cleanup)
+	cleanup="False"
+        shift # past argument
+	;;
+
+	-s|--short)
+	short_version="True"
+	shift # past argument
+	;;
+
         *)    # unknown option
         POSITIONAL+=("$1") # save it in an array for later
         shift # past argument
@@ -157,6 +180,9 @@ echo "kernel_patches = ${kernel_patches}"
 echo "sdk branch/tag = ${branch}"
 echo "image name = ${image_name} (if empty the image name will be of format)"
 echo "             dragonboard410c_latest_<sha of HEAD commit>"
+echo "sdcard_name = ${sdcard_name}"
+echo "cleanup = ${cleanup}"
+echo "short_version = ${short_version}"
 echo "#########################################################################"
 
 if [[ -z "${answer_yes}" ]]; then
@@ -164,8 +190,15 @@ if [[ -z "${answer_yes}" ]]; then
 fi
 
 basedir=$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )
+echo ${basedir}
 
 workingdir=".temp"
+
+if [[ -z "${short_version}" ]]; then
+	if [[ -d "${workingdir}" ]]; then
+		rm -rf ${workingdir}
+	fi
+fi
 
 pushd ${basedir}
 
@@ -173,24 +206,32 @@ mkdir -p ${workingdir}
 
 pushd ${workingdir}
 
-[ -d "aditof_linux" ] || {
-        git clone --branch "${kernel_branch}" --depth 1 "${kernel_repo}" aditof_linux
-}
+#Get the latest version of the kernel
+if [[ -z "${short_version}" ]]; then
+	[ -d "aditof_linux" ] || {
+ 		git clone --branch "${kernel_branch}" --depth 1 "${kernel_repo}" aditof_linux
+	}
+fi
 
 pushd "aditof_linux"
 
-cp ${basedir}/../linux-patches/"${kernel_patches}"/* .
+if [[ -z "${short_version}" ]]; then
+	#Apply all the patches
+	cp ${basedir}/../linux-patches/"${kernel_patches}"/* .
 
-sudo git config user.email "image script"
-sudo git config user.name "image script"
-git am 0*
+	sudo git config user.email "image script"
+	sudo git config user.name "image script"
+	git am 0*
 
-[ -d "toolchain" ] || {
-        mkdir -p toolchain
-        wget http://snapshots.linaro.org/components/toolchain/binaries/7.2-2017.11-rc1/aarch64-linux-gnu/gcc-linaro-7.2.1-2017.11-rc1-x86_64_aarch64-linux-gnu.tar.xz
-        tar -C toolchain -xvf gcc-linaro-7.2.1-2017.11-rc1-x86_64_aarch64-linux-gnu.tar.xz --strip-components 1
-}
+	#Get the toolchain
+	[ -d "toolchain" ] || {
+		mkdir -p toolchain
+	        wget http://snapshots.linaro.org/components/toolchain/binaries/7.2-2017.11-rc1/aarch64-linux-gnu/gcc-linaro-7.2.1-2017.11-rc1-x86_64_aarch64-linux-gnu.tar.xz
+		tar -C toolchain -xvf gcc-linaro-7.2.1-2017.11-rc1-x86_64_aarch64-linux-gnu.tar.xz --strip-components 1
+	}
+fi
 
+#Build boot image
 export ARCH=${arch}
 export CROSS_COMPILE=${cross_compile}
 export KERNEL_VERSION=${kernel_version}
@@ -206,23 +247,25 @@ abootimg --create boot-db410c.img -k Image.gz+dtb -r ramdisk.img \
            -c pagesize=2048 -c kerneladdr=0x80008000 -c ramdiskaddr=0x81000000 \
 	   -c cmdline="root=/dev/mmcblk1p9 rw rootwait console=ttyMSM0,115200n8"
 
-# copy resolv.conf to run
-set +e
-pushd /run
-sudo mkdir -p resolvconf
-sudo cp /etc/resolv.conf resolvconf/
-popd # pushd /run
-set -e
+if [[ -z "${short_version}" ]]; then
+	# copy resolv.conf to run
+	set +e
+	pushd /run
+	sudo mkdir -p resolvconf
+	sudo cp /etc/resolv.conf resolvconf/
+	popd # pushd /run
+	set -e
 
-#get the linux image
-wget https://releases.linaro.org/96boards/dragonboard410c/linaro/debian/17.09/linaro-stretch-alip-qcom-snapdragon-arm64-20171016-283.img.gz
-gunzip linaro-stretch-alip-qcom-snapdragon-arm64-20171016-283.img.gz
-mv linaro-stretch-alip-qcom-snapdragon-arm64-20171016-283.img linaro-4.9.56.img
+	#get the linux image
+	wget https://releases.linaro.org/96boards/dragonboard410c/linaro/debian/17.09/linaro-stretch-alip-qcom-snapdragon-arm64-20171016-283.img.gz
+	gunzip linaro-stretch-alip-qcom-snapdragon-arm64-20171016-283.img.gz
+	mv linaro-stretch-alip-qcom-snapdragon-arm64-20171016-283.img linaro-4.9.56.img
 
-# resize the image to fit all the things that need to be installed
-simg2img linaro-4.9.56.img linaro-4.9.56.img.raw
-sudo e2fsck -f linaro-4.9.56.img.raw
-sudo resize2fs linaro-4.9.56.img.raw 13G
+	# resize the image to fit all the things that need to be installed
+	simg2img linaro-4.9.56.img linaro-4.9.56.img.raw
+	sudo e2fsck -f linaro-4.9.56.img.raw
+	sudo resize2fs linaro-4.9.56.img.raw 13G
+fi
 
 #mount the image
 sudo mount -o loop linaro-4.9.56.img.raw /mnt
@@ -234,13 +277,15 @@ sudo cp -rf ${KERNEL_MODULES_PATH}/lib/modules/4.9-camera-lt-qcom /mnt/lib/modul
 
 # ########## build sdk
 
-[ -d "aditof_sdk" ] || {
-        git clone --branch "${branch}" --depth 1 https://github.com/D3-aavery/aditof_sdk
-}
+if [[ -z "${short_version}" ]]; then
+	[ -d "tof_sdk" ] || {
+		git clone --branch "${branch}" https://omni.d3engineering.com/cgit/cgit.cgi/d3/adi/tof_sdk.git/
+	}
+fi
 
 sha=""
 if [[ -z "${image_name}" ]]; then
-        pushd "aditof_sdk"
+        pushd "tof_sdk"
         sha=$(git log --pretty=format:'%h' -n 1)
         image_name="dragonboard410c_latest_${sha}.img"
         popd
@@ -248,16 +293,19 @@ fi
 
 sudo mkdir -p /mnt/home/linaro/workspace
 sudo mkdir -p /mnt/home/linaro/workspace/github
-# sudo cp -r aditof_sdk/ /mnt/home/linaro/workspace/github
+# sudo cp -r tof_sdk/ /mnt/home/linaro/workspace/github
 
 touch /mnt/home/linaro/info.txt
 echo "sdk version: ${branch} (${sha})" >> /mnt/home/linaro/info.txt
 
+#Deploy the chroot.sh script
 sudo cp ${basedir}/chroot.sh /mnt/
 sudo chmod +x /mnt/chroot.sh
 
 sudo cp /usr/bin/qemu-aarch64-static /mnt/usr/bin
 sudo modprobe binfmt_misc
+
+#Mount dev, sys,run, and proc to corresponding /mnt/
 for d in dev sys run proc; do sudo mount -o bind /$d /mnt/$d ; done
 #sudo chroot /mnt qemu-aarch64-static /bin/bash
 cat << EOF | sudo chroot /mnt
@@ -276,13 +324,14 @@ set -e
 #create the SD card image
 img2simg linaro-4.9.56.img.raw linaro-4.9.56-6G.img
 
+if [[ -z "${short_version}" ]]; then
+	wget http://snapshots.linaro.org/96boards/dragonboard410c/linaro/rescue/latest/dragonboard-410c-bootloader-sd-linux-*.zip -O dragonboard410c_bootloader_sd_linux.zip
+	unzip -d qcom_bootloaders dragonboard410c_bootloader_sd_linux.zip
 
-wget http://snapshots.linaro.org/96boards/dragonboard410c/linaro/rescue/latest/dragonboard-410c-bootloader-sd-linux-*.zip -O dragonboard410c_bootloader_sd_linux.zip
-unzip -d qcom_bootloaders dragonboard410c_bootloader_sd_linux.zip
-
-[ -d "db-boot-tools" ] || {
-        git clone --branch=master https://git.linaro.org/landing-teams/working/qualcomm/db-boot-tools.git
-}
+	[ -d "db-boot-tools" ] || {
+		git clone --branch=master https://git.linaro.org/landing-teams/working/qualcomm/db-boot-tools.git
+	}
+fi
 
 pushd qcom_bootloaders
 bootloader=$(ls)
@@ -330,9 +379,18 @@ popd # pushd ${workingdir}
 
 mv ${workingdir}/"aditof_linux/${image_name}" .
 
-rm -rf ${workingdir}
+if [[ "${cleanup}" == "True" ]]; then
+	rm -rf ${workingdir}
+fi
 
 popd # pushd ${basedir}
+
+if [[ -z "${sdcard_name}" ]]; then
+	echo "sdcard_name is empty, not DD'ing"
+else
+	echo "Starting DD at /dev/${sdcard_name}"
+	sudo /bin/dd if=${image_name} of=/dev/${sdcard_name} bs=4M status=progress
+fi
 
 set +e
 printf -- '\n';
