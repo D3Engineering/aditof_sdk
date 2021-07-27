@@ -43,7 +43,7 @@ sudo ldconfig
 git clone --branch d3/dev/Arrow https://omni.d3engineering.com/cgit/cgit.cgi/d3/adi/tof_sdk.git/
 echo $1
 
-cd aditof_sdk
+cd tof_sdk
 
 mkdir -p build
 cd build
