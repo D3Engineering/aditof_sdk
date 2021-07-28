@@ -16,6 +16,7 @@ sudo apt-get install -yy -qq libssl-dev python-dev python3-dev build-essential l
 cd /home/linaro/workspace/github
 
 wget --no-check-certificate --no-cache --no-cookies http://swdownloads.analog.com/cse/aditof/deps-dragonboard.tar.xz
+read -p "Press enter to continue"
 tar -xf deps-dragonboard.tar.xz
 
 sed -i 's+/home/linaro/workspace/github/aditof_sdk/deps/installed/opencv-3.4.1+/usr/local+g' /home/linaro/workspace/github/deps/opencv-3.4.1/lib/pkgconfig/opencv.pc
@@ -73,7 +74,7 @@ mkdir -p /home/linaro/Desktop
 cd /home/linaro/Desktop
 touch aditof-demo.sh
 echo '#!/bin/bash' >> aditof-demo.sh
-echo 'cd /home/linaro/workspace/github/aditof_sdk/build/examples/aditof-demo' >> aditof-demo.sh
+echo 'cd /home/linaro/workspace/github/tof_sdk/build/examples/aditof-demo' >> aditof-demo.sh
 echo './aditof-demo' >> aditof-demo.sh
 sudo chmod +x aditof-demo.sh
 
