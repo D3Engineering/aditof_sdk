@@ -41,8 +41,8 @@ sudo cmake --build . --target install
 
 #download and build the SDK
 cd /home/pi/workspace/github
-git clone https://github.com/analogdevicesinc/aditof_sdk
-cd aditof_sdk
+git clone https://github.com/analogdevicesinc/tof_sdk
+cd tof_sdk
 mkdir build
 cd build
 cmake -DRASPBERRYPI=1 -DCMAKE_PREFIX_PATH="/opt/glog;/opt/protobuf;/opt/websockets" ..

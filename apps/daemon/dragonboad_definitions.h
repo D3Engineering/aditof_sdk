@@ -43,13 +43,13 @@
 #define NETWORK_SERVER "aditof-server"
 
 #define NETWORK_SERVER_START_COMMAND                                           \
-    "/home/linaro/workspace/github/aditof_sdk/build/apps/"                     \
+    "/home/linaro/workspace/github/tof_sdk/build/apps/"                     \
     "server/" NETWORK_SERVER
 
 #define UVC_APP "uvc-gadget"
 #define UVC_APP_START_SCRIPT "config_pipe.sh"
 #define UVC_APP_START_COMMAND                                                  \
-    "/home/linaro/workspace/github/aditof_sdk/build/apps/"                     \
+    "/home/linaro/workspace/github/tof_sdk/build/apps/"                     \
     "uvc-app/" UVC_APP_START_SCRIPT
 
 #endif // DRAGONBOARD_DEFINITIONS_H

@@ -40,19 +40,19 @@ sudo cmake --build . --target install
 
 #download and build the SDK
 cd /home/linaro/workspace/github
-git clone https://github.com/analogdevicesinc/aditof_sdk
-cd aditof_sdk
+git clone https://github.com/analogdevicesinc/tof_sdk
+cd tof_sdk
 mkdir build
 cd build
 cmake -DDRAGONBOARD=1 -DCMAKE_PREFIX_PATH="/opt/glog;/opt/protobuf;/opt/websockets" ..
 make -j8
 
 #build the uvc-app for host USB connectivity
-cd /home/linaro/workspace/github/aditof_sdk/apps/uvc-app
+cd /home/linaro/workspace/github/tof_sdk/apps/uvc-app
 make -j8
 
 #build and install the USB daemon
-cd /home/linaro/workspace/github/aditof_sdk/apps/daemon
+cd /home/linaro/workspace/github/tof_sdk/apps/daemon
 sudo cp tof-programming.service /etc/systemd/system/
 mkdir build
 cd build

@@ -347,7 +347,7 @@ run_docker() {
     sudo docker pull ${docker}
 
     sudo docker run --rm=true \
-			-v `pwd`:/aditof_sdk:rw \
+			-v `pwd`:/tof_sdk:rw \
 			${docker} \
-            /bin/bash -xe ${script} /aditof_sdk "${script_args}"
+            /bin/bash -xe ${script} /tof_sdk "${script_args}"
 }

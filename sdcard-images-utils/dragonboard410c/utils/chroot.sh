@@ -15,11 +15,10 @@ sudo apt-get install -yy -qq libssl-dev python-dev python3-dev build-essential l
 
 cd /home/linaro/workspace/github
 
-wget --no-check-certificate --no-cache --no-cookies http://swdownloads.analog.com/cse/aditof/deps-dragonboard.tar.xz
-read -p "Press enter to continue"
+wget --no-check-certificate --no-cache --no-cookies --header="If-Modified-Since: Sat, 1 Jan 2000 00:00:00 GMT" http://swdownloads.analog.com/cse/aditof/deps-dragonboard.tar.xz
 tar -xf deps-dragonboard.tar.xz
 
-sed -i 's+/home/linaro/workspace/github/aditof_sdk/deps/installed/opencv-3.4.1+/usr/local+g' /home/linaro/workspace/github/deps/opencv-3.4.1/lib/pkgconfig/opencv.pc
+sed -i 's+/home/linaro/workspace/github/tof_sdk/deps/installed/opencv-3.4.1+/usr/local+g' /home/linaro/workspace/github/deps/opencv-3.4.1/lib/pkgconfig/opencv.pc
 
 cp -r /home/linaro/workspace/github/deps/opencv-3.4.1/* /usr/local/
 cp -r /home/linaro/workspace/github/deps/glog/* /usr/local/
@@ -41,8 +40,8 @@ sudo rm -rf /home/linaro/workspace/github/deps-dragonboard.tar.xz
 
 sudo ldconfig
 
-git clone --branch d3/dev/Arrow https://omni.d3engineering.com/cgit/cgit.cgi/d3/adi/tof_sdk.git/
-echo $1
+#git clone --branch d3/dev/Arrow https://omni.d3engineering.com/cgit/cgit.cgi/d3/adi/tof_sdk.git/
+git clone --branch $1 https://omni.d3engineering.com/cgit/cgit.cgi/d3/adi/tof_sdk.git/
 
 cd tof_sdk
 
@@ -58,7 +57,7 @@ make -j8
 # This is not an issue as we don't need to reload the rules in this context
 sudo make install-udev-rules
 
-cd /home/linaro/workspace/github/aditof_sdk/apps/daemon
+cd /home/linaro/workspace/github/tof_sdk/apps/daemon
 sudo cp tof-programming.service /etc/systemd/system/
 mkdir -p build
 cd build
@@ -66,7 +65,7 @@ cmake ..
 make -j8
 sudo systemctl enable tof-programming
 
-cd /home/linaro/workspace/github/aditof_sdk/utils/dragonboard
+cd /home/linaro/workspace/github/tof_sdk/utils/dragonboard
 sudo cp config_pipe.service /etc/systemd/system/
 sudo systemctl enable config_pipe
 
