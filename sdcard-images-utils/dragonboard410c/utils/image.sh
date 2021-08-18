@@ -47,7 +47,7 @@ print_help() {
         echo "        Default: master "
         echo "--image_name"
         echo "        Specify the name of the resulting image. "
-        echo "        Default: dragonboard410c_latest_<sha of HEAD commit from \"branch\"> "
+        echo "        Default: d3_dragonboard410c_latest_<sha of HEAD commit from \"branch\"> "
 	echo "--sdcard_name"
 	echo "	Specify the name of the sdcard device that the image will DD'ed onto"
 	echo "	Example : sudo /bin/dd if=dragonboard410c_lastest_<sha of HEAD commit from \"branch\"> of=/dev/sdcard_name bs=4M status=progress"
@@ -190,7 +190,6 @@ if [[ -z "${answer_yes}" ]]; then
 fi
 
 basedir=$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )
-echo ${basedir}
 
 workingdir=".temp"
 
@@ -287,7 +286,7 @@ sha=""
 if [[ -z "${image_name}" ]]; then
         pushd "tof_sdk"
         sha=$(git log --pretty=format:'%h' -n 1)
-        image_name="dragonboard410c_latest_${sha}.img"
+        image_name="d3_dragonboard410c_latest_${sha}.img"
         popd
 fi
 

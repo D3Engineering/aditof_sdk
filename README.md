@@ -1,11 +1,9 @@
 # Analog Devices 3D ToF software suite 
 
 ## Overview
-The **ADI ToF SDK** is a cross platform library for the Analog Devices depth cameras based on the ADDI9036 TOF Signal Processor. It provides support for data processing on the embedded processor platform as well as for USB, Ethernet or Wi-Fi to connect to a host computer. This flexibility enables evaluation across a wide range of use cases and environments.
+This is the D3 version of the ADI ToF SDK. The **ADI ToF SDK** is a cross platform library for the Analog Devices depth cameras based on the ADDI9036 TOF Signal Processor. It provides support for data processing on the embedded processor platform as well as for USB, Ethernet or Wi-Fi to connect to a host computer. This flexibility enables evaluation across a wide range of use cases and environments. There are changes to the images that allow them to work with D3 ToF module.
 
 The SDK provides an API to control the ToF camera, IR stream and depth data. Windows and Linux support are built into the SDK as well as sample code and wrappers for various languages including Python, C/C++ and Matlab.
-
-License : [![License](https://img.shields.io/badge/license-BSD_3-blue.svg)](https://github.com/analogdevicesinc/aditof_sdk/blob/master/LICENSE)
 
 ## Supported host platforms
 
@@ -18,7 +16,7 @@ For more details on building the SDK on a host platform please check the **User 
 
 ## Supported embedded platforms
 
-Designed using a modular approach, the 3D ToF platforms enable connectivity to the to a variety of embedded processing platforms. For more details on running the SDK on your processing platform of choice please check the **User Guide** below.
+Designed using a modular approach, the 3D ToF platforms enable connectivity to the to a variety of embedded processing platforms. For more details on running the SDK on your processing platform of choice please check the **User Guide** below. 
 
 ### D3TCM-9036 TOF Camera
 
@@ -29,6 +27,11 @@ Designed using a modular approach, the 3D ToF platforms enable connectivity to t
 | Nvidia Jetson Xavier NX | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_xavier_nx) <br> [Build Instructions](doc/xavier-nx/build_instructions.md) | [![Build Status](https://dev.azure.com/AnalogDevices/3DToF/_apis/build/status/analogdevicesinc.aditof_sdk?branchName=master)](https://dev.azure.com/AnalogDevices/3DToF/_build?view=runs&branchFilter=262) | [![SD card image](https://img.shields.io/badge/release-latest_sd_card_image-blue.svg)](http://swdownloads.analog.com/cse/aditof/jetson_xavier_nx-latest-image.tar.xz) <br> [![Sha256sum Checksum](https://img.shields.io/badge/sha256sum-yellow.svg)](http://swdownloads.analog.com/cse/aditof/jetson_xavier_nx-latest-image-Sha256sum.txt) 
 | Thor96 | [Arrow Electronics Github](https://github.com/ArrowElectronics/aditof_sdk#supported-embedded-platforms) | - | - |
 
+Since the SD Card Images are compressed using 7zip to allow for hosting on Github and there are multiple files for some images, the command to extract the image is shown as an example below:
+
+```console
+d3@d3-engineering:~$ 7z x d3_jetson_nx.7z.001
+```
 
 [How to write the SD card image onto the SD card?](doc/sdcard_burn.md)
 
@@ -71,17 +74,4 @@ For more details about the SDK check the links below:
 | sdk | SDK source code |
 | tools | Camera calibration tools |
 | utils | Various utils for the embedded platforms |
-
-## Contributing to the SDK
-
-### Formating
-
-The SDK is formated using <a href="https://packages.ubuntu.com/search?keywords=clang-format-6.0">clang-format 6.0</a>.
-
-Before creating a PR please run `./scrips/format.sh` from the root of the project.
-
-In order to prevent a file from being formated add it to `.clangformatignore`
-
-
-
 

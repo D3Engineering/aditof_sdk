@@ -35,7 +35,7 @@
 static const char *EEPROM_DEV_PATH = "/sys/bus/i2c/devices/1-0056/eeprom";
 
 static const char *TEMP_SENSOR_DEV_PATH = "/dev/i2c-1";
-static const char LASER_TEMP_SENSOR_I2C_ADDR = 0x49;
+static const char LASER_TEMP_SENSOR_I2C_ADDR = 0x4d;
 static const char AFE_TEMP_SENSOR_I2C_ADDR = 0x48;
 
 static const char *CAPTURE_DEVICE_NAME = "Qualcomm Camera Subsystem";

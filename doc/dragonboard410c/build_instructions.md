@@ -1,5 +1,7 @@
 # DragonBoard410c Build Instructions
 
+## Creating a custom image
+The DragonBoard410C does not have "build from source" directions like some of the other boards but there is a [Image Script](../../sdcard-images-utils/dragonboard410c/utils) that provides a way to create an image and the kernel to be customized. This has been modified by D3 to allow the user to keep the temporary directory where the image gets created instead of automatically cleaning up after itself and make changes to the local directories and shorten the image making process by quite a large amount by keeping the files locally.
 
 ## Building the SDK only
 
