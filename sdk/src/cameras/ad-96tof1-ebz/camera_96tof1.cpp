@@ -55,7 +55,7 @@ static const std::map<std::string, std::array<rangeStruct, 3>>
         {"RevB",
          {{{"near", 250, 800}, {"medium", 300, 3000}, {"far", 3000, 6000}}}},
         {"RevC",
-         {{{"near", 250, 800}, {"medium", 300, 4500}, {"far", 3000, 6000}}}}};
+         {{{"near", 250, 800}, {"medium", 400, 2400}, {"far", 2000, 5000}}}}};
 
 static const std::string skCustomMode = "custom";
 
