@@ -25,15 +25,14 @@ Designed using a modular approach, the 3D ToF platforms enable connectivity to t
 | DragonBoard 410c | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_db410c) <br> [Build Instructions](doc/dragonboard410c/build_instructions.md) | [![Build Status](https://dev.azure.com/AnalogDevices/3DToF/_apis/build/status/analogdevicesinc.aditof_sdk?branchName=master)](https://dev.azure.com/AnalogDevices/3DToF/_build?view=runs&branchFilter=262) | [![SD card image](https://img.shields.io/badge/release-latest_sd_card_image-blue.svg)](http://swdownloads.analog.com/cse/aditof/dragonboard410c-latest-image.tar.xz) <br> [![Sha256sum Checksum](https://img.shields.io/badge/sha256sum-yellow.svg)](http://swdownloads.analog.com/cse/aditof/dragonboard410c-latest-image-Sha256sum.txt) |
 | Raspberry Pi 3,4 | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_rpi) <br> [Build Instructions](doc/raspberrypi3/build_instructions.md) | [![Build Status](https://dev.azure.com/AnalogDevices/3DToF/_apis/build/status/analogdevicesinc.aditof_sdk?branchName=master)](https://dev.azure.com/AnalogDevices/3DToF/_build?view=runs&branchFilter=262) | [![SD card image](https://img.shields.io/badge/release-latest_sd_card_image-blue.svg)](http://swdownloads.analog.com/cse/aditof/raspberrypi-latest-image.tar.xz) <br> [![Sha256sum Checksum](https://img.shields.io/badge/sha256sum-yellow.svg)](http://swdownloads.analog.com/cse/aditof/raspberrypi-latest-image-Sha256sum.txt) 
 | Nvidia Jetson Xavier NX | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_xavier_nx) <br> [Build Instructions](doc/xavier-nx/build_instructions.md) | [![Build Status](https://dev.azure.com/AnalogDevices/3DToF/_apis/build/status/analogdevicesinc.aditof_sdk?branchName=master)](https://dev.azure.com/AnalogDevices/3DToF/_build?view=runs&branchFilter=262) | [![SD card image](https://img.shields.io/badge/release-latest_sd_card_image-blue.svg)](http://swdownloads.analog.com/cse/aditof/jetson_xavier_nx-latest-image.tar.xz) <br> [![Sha256sum Checksum](https://img.shields.io/badge/sha256sum-yellow.svg)](http://swdownloads.analog.com/cse/aditof/jetson_xavier_nx-latest-image-Sha256sum.txt) 
-| Thor96 | [Arrow Electronics Github](https://github.com/ArrowElectronics/aditof_sdk#supported-embedded-platforms) | - | - |
 
-Since the SD Card Images are compressed using 7zip to allow for hosting on Github and there are multiple files for some images, the command to extract the image is shown as an example below:
+SD Card Images are compressed using 7zip to allow for hosting on Github and there are multiple files for some images, the command to extract the image is shown as an example below:
 
 ```console
 d3@d3-engineering:~$ 7z x d3_jetson_nx.7z.001
 ```
 
-[How to write the SD card image onto the SD card?](doc/sdcard_burn.md)
+[How to write the SD card image onto the SD card](doc/sdcard_burn.md)
 
 ## SDK documentation
 

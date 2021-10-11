@@ -35,3 +35,8 @@ analog@jetson:~/workspace/aditof_sdk/build$ make -j4
 ## Linux Kernel
 The SD card image already contains the customized Linux kernel image and required devicetree to support the ToF Camera connected to CSI connector on Jetson.
 If rebuilding the kernel or devicetree is needed please follow the [instructions](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_jetson).
+
+#Demo
+```console
+analog@jetson: ./aditof_sdk/build/examples/aditofdemo
+```
