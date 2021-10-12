@@ -21,7 +21,7 @@ Designed using a modular approach, the 3D ToF platforms enable connectivity to t
 ### D3TCM-9036 TOF Camera
 
 | Platform | Documentation |
-| --------- | ------------- | ----------- | ----------- |
+| --------- | -------------|
 | DragonBoard 410c | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_db410c) <br> [Build Instructions](doc/dragonboard410c/build_instructions.md) 
 | Raspberry Pi 3,4 | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_rpi) <br> [Build Instructions](doc/raspberrypi3/build_instructions.md) | Nvidia Jetson Xavier NX | [User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-96tof1-ebz/ug_xavier_nx) <br> [Build Instructions](doc/xavier-nx/build_instructions.md) |
 
