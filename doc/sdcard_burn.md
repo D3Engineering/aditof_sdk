@@ -2,7 +2,7 @@
 
 The size of the SD card that is going to be used to write the image to, must be equal or greater than the size of the image.
 Writing the image on the SD card will take about 15 to 20 minutes for a 16GB image, depending on the transfer speed of the system being used. 
-
+For the Jetson NX, be sure to fully extract all 3 image files to the same location.
 ## Linux
 * Make sure that xz-utils are installed on your machine
     ~~~sh
